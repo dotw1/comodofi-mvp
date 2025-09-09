@@ -1,0 +1,49 @@
+{
+  "indices": [
+    {
+      "symbol": "LEADER_APPROVAL",
+      "name": "Leader Approval Index",
+      "desc": "Composite of polling averages, search interest, and media mentions.",
+      "source": {
+        "type": "csv",
+        "path": "data/leader_approval.csv",
+        "value_field": "value",
+        "time_field": "timestamp"
+      },
+      "format": {
+        "decimals": 2,
+        "unit": ""
+      }
+    },
+    {
+      "symbol": "CELEB_HYPE",
+      "name": "Celebrity Hype Index",
+      "desc": "Composite of streaming counts, social mentions, and ticket demand.",
+      "source": {
+        "type": "csv",
+        "path": "data/celebrity_hype.csv",
+        "value_field": "value",
+        "time_field": "timestamp"
+      },
+      "format": {
+        "decimals": 2,
+        "unit": ""
+      }
+    },
+    {
+      "symbol": "AI_VS_CRYPTO",
+      "name": "AI vs Crypto Momentum",
+      "desc": "Relative search/news volume between AI and Crypto narratives.",
+      "source": {
+        "type": "csv",
+        "path": "data/ai_vs_crypto.csv",
+        "value_field": "value",
+        "time_field": "timestamp"
+      },
+      "format": {
+        "decimals": 3,
+        "unit": ""
+      }
+    }
+  ]
+}

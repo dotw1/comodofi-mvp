@@ -1,0 +1,17 @@
+
+<svg width="360" height="80" viewBox="0 0 360 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect rx="16" ry="16" x="0" y="0" width="80" height="80" fill="url(#g)"/>
+  <g transform="translate(16,16)">
+    <circle cx="24" cy="24" r="10" fill="#fff" opacity="0.9"/>
+    <path d="M42 8c8 8 8 24 0 32" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M50 0c12 12 12 40 0 52" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.6"/>
+  </g>
+  <text x="96" y="50" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#111827">Comodofi</text>
+  <text x="96" y="70" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="500" fill="#6B7280">The exchange of influence</text>
+</svg>
