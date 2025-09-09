@@ -145,10 +145,9 @@ with st.sidebar:
 
 # ---- Front page hero (logo only)
 # ---- Front page hero (only one logo, centered) ----
-st.markdown("<div style='text-align:center; margin:2rem 0;'>", unsafe_allow_html=True)
-st.image("logo.svg", width=260)  # bigger size for front page
+st.markdown("<div style='text-align:center; margin:1rem 0 2rem;'>", unsafe_allow_html=True)
+st.image("logo.svg", width=320)   # adjust size if you want
 st.markdown("</div>", unsafe_allow_html=True)
-
 st.divider()
 
 # ---- Load selected index + metrics
