@@ -156,23 +156,11 @@ df = load_series(idx_cfg)
 mark = float(df["value"].iloc[-1])
 fr = funding_rate(df["value"]).iloc[-1] * 24 * 100
 
-# --- Hero with logo + brand centered ---
-# --- Hero Section ---
+# --- Front page logo & brand ---
+st.image("The exchange of influence.png", width=280)
 st.markdown(
-    """
-    <div style="text-align:center; margin-top:1rem; margin-bottom:2rem;">
-        <img src="logo.png" width="96">
-        <div style="font-size:2.5rem; font-weight:800; margin-top:0.5rem;">
-            Comodofi
-        </div>
-        <div style="font-size:1.2rem; color:gray; margin-top:0.2rem;">
-            The exchange of influence
-        </div>
-    </div>
-    """,
+    "<div style='text-align:center; font-size:1.2rem; color:gray;'>The exchange of influence</div>",
     unsafe_allow_html=True
-)
-
 
 colA, colB = st.columns([3,2], gap="large")
 with colA:
