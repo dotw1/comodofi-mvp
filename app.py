@@ -82,8 +82,7 @@ ensure_state()
 
 # ---- Sidebar (branding small + controls)
 with st.sidebar:
-    st.image("logo.svg", width=120)
-    st.caption("**Comodofi** — The exchange of influence")
+    st.image("logo.svg", width=220)
     st.markdown("---")
 
     # Actions
@@ -142,12 +141,11 @@ with st.sidebar:
     notional = st.number_input("Order Notional (USD)", min_value=10.0, value=500.0, step=10.0)
     side = st.radio("Side", ["LONG", "SHORT"], horizontal=True)
 
-
-# ---- Front page hero (logo only)
-# ---- Front page hero (only one logo, centered) ----
-st.markdown("<div style='text-align:center; margin:1rem 0 2rem;'>", unsafe_allow_html=True)
-st.image("logo.svg", width=320)   # adjust size if you want
+# ---- Front page hero (only one logo, bigger, centered) ----
+st.markdown("<div style='text-align:center; margin:2rem 0;'>", unsafe_allow_html=True)
+st.image("logo.svg", width=420)  # make it bigger (adjust px as you like)
 st.markdown("</div>", unsafe_allow_html=True)
+
 st.divider()
 
 # ---- Load selected index + metrics
