@@ -125,7 +125,7 @@ ensure_state()
 
 # Controls
 st.sidebar.header("Trade")
-symbol = st.sidebar.selectbox("Index", symbols, format_func=lambda s: INDEX_MAP[s]["name"])
+# Build categories from config and filter indices by category categories = sorted({INDEX_MAP[s].get("category", "Other") for s in symbols}) cat = st.sidebar.selectbox("Category", ["All"] + categories) filtered_symbols = [s for s in symbols if cat == "All" or INDEX_MAP[s].get("category") == cat]  symbol = st.sidebar.selectbox(     "Index",     filtered_symbols if filtered_symbols else symbols,     format_func=lambda s: INDEX_MAP[s]["name"] )
 lev = st.sidebar.slider("Leverage", 1, 20, 5)
 notional = st.sidebar.number_input("Order Notional (USD)", min_value=10.0, value=500.0, step=10.0)
 side = st.sidebar.radio("Side", ["LONG","SHORT"], horizontal=True)
