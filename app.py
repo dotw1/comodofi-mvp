@@ -5,6 +5,10 @@ from datetime import datetime
 import json
 import plotly.graph_objects as go  # keep this if you added Plotly
 
+TAKER_FEE_BPS = 5            # 0.05% taker fee (demo)
+MAINT_MARGIN_RATIO = 0.005   # 0.5% maintenance margin (demo)
+
+
 # ---- Page config (must be exactly once and before any other st.* call) ----
 st.set_page_config(page_title="Comodofi – MVP", page_icon="📊", layout="wide")
 
@@ -193,6 +197,20 @@ c1.write(f"**Symbol**: {symbol}")
 c2.write(f"**Side**: {side}")
 c3.write(f"**Leverage**: {lev}x")
 c4.write(f"**Notional**: ${notional:,.2f}")
+# --- Fee + liquidation estimate ---
+entry = mark
+qty = (notional * lev) / entry * (1 if side == "LONG" else -1)
+fee = notional * (TAKER_FEE_BPS / 10_000)
+maint = MAINT_MARGIN_RATIO * notional
+
+# equity ≈ notional - fee + (P - entry) * qty == maint
+# → P(liq) = entry + (maint - (notional - fee)) / qty
+liq_price = entry + (maint - (notional - fee)) / qty if qty != 0 else float("nan")
+
+lc1, lc2 = st.columns(2)
+lc1.metric("Est. taker fee", f"${fee:,.2f}")
+lc2.metric("Est. liq price", f"{liq_price:.4f}" if np.isfinite(liq_price) else "—")
+
 
 def open_position(symbol, side, notional, lev, entry):
     qty = (notional * lev) / entry
