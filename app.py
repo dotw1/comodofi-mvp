@@ -175,7 +175,6 @@ with col2:
 
 colA, colB = st.columns([3,2], gap="large")
 with colA:
-    with colA:
     # --- Robinhood-style header (big price + change) ---
     dfv = df.copy()
     # timeframe toggle
