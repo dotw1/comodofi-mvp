@@ -35,6 +35,48 @@ with st.sidebar:
     st.image("logo.svg")
     st.caption("**Comodofi** — The exchange of influence")
     st.markdown("---")
+    # Sidebar Branding
+with st.sidebar:
+    st.image("logo.svg")
+    st.caption("**Comodofi** — The exchange of influence")
+    st.markdown("---")
+
+    if st.button("🔄 Refresh data"):
+        st.cache_data.clear()
+        st.experimental_rerun()
+
+    if st.button("🧹 Reset demo wallet to $10,000"):
+        st.session_state.balances = {"USD": 10000.0}
+        st.session_state.positions = []
+        st.session_state.log = []
+        st.success("Wallet reset.")
+        st.experimental_rerun()
+
+    with st.expander("➕ Add Index by URL (CSV)"):
+        st.caption("Paste a CSV link (must have columns: timestamp, value). Tip: Google Sheets → File → Share → Publish to web → CSV.")
+        _sym  = st.text_input("Symbol (e.g., TWITTER_BUZZ)")
+        _name = st.text_input("Display name")
+        _desc = st.text_area("Description")
+        _url  = st.text_input("CSV URL")
+        _dec  = st.number_input("Decimals", 0, 6, 2)
+        if st.button("Add index"):
+            try:
+                test = pd.read_csv(_url)
+                cols = {c.lower() for c in test.columns}
+                if not {"timestamp","value"}.issubset(cols):
+                    st.error("CSV must contain columns: timestamp, value")
+                else:
+                    INDEX_MAP[_sym] = {
+                        "symbol": _sym,
+                        "name": _name or _sym,
+                        "desc": _desc or "User-added index",
+                        "source": {"type":"url_csv","url":_url,"value_field":"value","time_field":"timestamp"},
+                        "format": {"decimals": int(_dec), "unit": ""}
+                    }
+                    symbols.append(_sym)
+                    st.success(f"Added {_sym}. Select it in the Index dropdown.")
+            except Exception as e:
+                st.error(f"Could not load CSV: {e}")
 
 # Sidebar Branding
 with st.sidebar:
