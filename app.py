@@ -74,6 +74,17 @@ def ensure_state():
     if "log" not in st.session_state: st.session_state.log = []
 ensure_state()
 
+# --- Minimal styling for a clean hero ---
+st.markdown("""
+<style>
+.hero-wrap { text-align:center; margin: -0.5rem 0 1.25rem 0; }
+.hero-title { font-size: 2.25rem; font-weight: 800; line-height: 1.1; }
+.hero-sub   { font-size: 0.95rem; color: #6b7280; margin-top: 0.15rem; }
+.hero-tag   { font-size: 0.9rem; color: #94a3b8; margin-top: 0.35rem; }
+</style>
+""", unsafe_allow_html=True)
+
+
 # ---- Sidebar (ONE block only) ----
 with st.sidebar:
     # Branding
@@ -143,8 +154,18 @@ df = load_series(idx_cfg)
 mark = float(df["value"].iloc[-1])
 fr = funding_rate(df["value"]).iloc[-1] * 24 * 100
 
-st.title("📊 Comodofi – Influence Perps (MVP)")
-st.caption("Trade attention & influence as indices. Demo only.")
+# Centered hero with logo + brand
+c1, c2, c3 = st.columns([1, 2, 1])
+with c2:
+    st.image("logo.svg", width=220)
+    st.markdown("""
+    <div class="hero-wrap">
+      <div class="hero-title">Comodofi</div>
+      <div class="hero-sub">The exchange of influence</div>
+      <div class="hero-tag">Trade attention &amp; influence as indices. Demo only.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 colA, colB = st.columns([3,2], gap="large")
 with colA:
