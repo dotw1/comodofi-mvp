@@ -9,7 +9,7 @@ st.set_page_config(page_title="Comodofi – MVP", page_icon="📊", layout="wide
 
 # Sidebar Branding
 with st.sidebar:
-    st.image("assets/logo.svg")
+    st.image("logo.svg")
     st.caption("**Comodofi** — The exchange of influence")
     st.markdown("---")
 
