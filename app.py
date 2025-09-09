@@ -1,15 +1,15 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime
 import json
+import plotly.graph_objects as go  # keep this if you added Plotly
 
-st.set_page_config(page_title="Comodofi – MVP", page_icon="📊", layout="wide")
+# ---- Page config (must be exactly once and before any other st.* call) ----
 st.set_page_config(page_title="Comodofi – MVP", page_icon="📊", layout="wide")
 
-# --- Access Gate (invite-only) ---
-INVITE_CODE = "COMODOFI2025"  # change this
+# ---- Access Gate (invite-only) ----
+INVITE_CODE = "COMODOFI2025"  # change this if you want
 
 if "auth_ok" not in st.session_state:
     st.session_state.auth_ok = False
@@ -30,60 +30,7 @@ if not st.session_state.auth_ok:
             st.error("Wrong code or missing nickname.")
     st.stop()
 
-# Sidebar Branding
-with st.sidebar:
-    st.image("logo.svg")
-    st.caption("**Comodofi** — The exchange of influence")
-    st.markdown("---")
-    # Sidebar Branding
-with st.sidebar:
-    st.image("logo.svg")
-    st.caption("**Comodofi** — The exchange of influence")
-    st.markdown("---")
-
-    if st.button("🔄 Refresh data"):
-        st.cache_data.clear()
-        st.experimental_rerun()
-
-    if st.button("🧹 Reset demo wallet to $10,000"):
-        st.session_state.balances = {"USD": 10000.0}
-        st.session_state.positions = []
-        st.session_state.log = []
-        st.success("Wallet reset.")
-        st.experimental_rerun()
-
-    with st.expander("➕ Add Index by URL (CSV)"):
-        st.caption("Paste a CSV link (must have columns: timestamp, value). Tip: Google Sheets → File → Share → Publish to web → CSV.")
-        _sym  = st.text_input("Symbol (e.g., TWITTER_BUZZ)")
-        _name = st.text_input("Display name")
-        _desc = st.text_area("Description")
-        _url  = st.text_input("CSV URL")
-        _dec  = st.number_input("Decimals", 0, 6, 2)
-        if st.button("Add index"):
-            try:
-                test = pd.read_csv(_url)
-                cols = {c.lower() for c in test.columns}
-                if not {"timestamp","value"}.issubset(cols):
-                    st.error("CSV must contain columns: timestamp, value")
-                else:
-                    INDEX_MAP[_sym] = {
-                        "symbol": _sym,
-                        "name": _name or _sym,
-                        "desc": _desc or "User-added index",
-                        "source": {"type":"url_csv","url":_url,"value_field":"value","time_field":"timestamp"},
-                        "format": {"decimals": int(_dec), "unit": ""}
-                    }
-                    symbols.append(_sym)
-                    st.success(f"Added {_sym}. Select it in the Index dropdown.")
-            except Exception as e:
-                st.error(f"Could not load CSV: {e}")
-
-# Sidebar Branding
-with st.sidebar:
-    st.image("logo.svg")
-    st.caption("**Comodofi** — The exchange of influence")
-    st.markdown("---")
-
+# ---- Config & indices (must load BEFORE building the sidebar) ----
 @st.cache_data
 def load_config():
     with open("indices.json", "r") as f:
@@ -123,12 +70,69 @@ def ensure_state():
     if "log" not in st.session_state: st.session_state.log = []
 ensure_state()
 
-# Controls
-st.sidebar.header("Trade")
-# Build categories from config and filter indices by category categories = sorted({INDEX_MAP[s].get("category", "Other") for s in symbols}) cat = st.sidebar.selectbox("Category", ["All"] + categories) filtered_symbols = [s for s in symbols if cat == "All" or INDEX_MAP[s].get("category") == cat]  symbol = st.sidebar.selectbox(     "Index",     filtered_symbols if filtered_symbols else symbols,     format_func=lambda s: INDEX_MAP[s]["name"] )
-lev = st.sidebar.slider("Leverage", 1, 20, 5)
-notional = st.sidebar.number_input("Order Notional (USD)", min_value=10.0, value=500.0, step=10.0)
-side = st.sidebar.radio("Side", ["LONG","SHORT"], horizontal=True)
+# ---- Sidebar (ONE block only) ----
+with st.sidebar:
+    # Branding
+    st.image("logo.svg")
+    st.caption("**Comodofi** — The exchange of influence")
+    st.markdown("---")
+
+    # Actions
+    if st.button("🔄 Refresh data"):
+        st.cache_data.clear()
+        st.experimental_rerun()
+
+    if st.button("🧹 Reset demo wallet to $10,000"):
+        st.session_state.balances = {"USD": 10000.0}
+        st.session_state.positions = []
+        st.session_state.log = []
+        st.success("Wallet reset.")
+        st.experimental_rerun()
+
+    # Add Index by URL
+    with st.expander("➕ Add Index by URL (CSV)"):
+        st.caption("Google Sheets → Share → Publish to web → CSV. CSV must have columns: timestamp, value.")
+        _sym  = st.text_input("Symbol (e.g., TWITTER_BUZZ)")
+        _name = st.text_input("Display name")
+        _desc = st.text_area("Description")
+        _url  = st.text_input("CSV URL")
+        _dec  = st.number_input("Decimals", 0, 6, 2)
+        if st.button("Add index"):
+            try:
+                test = pd.read_csv(_url)
+                cols = {c.lower() for c in test.columns}
+                if not {"timestamp","value"}.issubset(cols):
+                    st.error("CSV must contain columns: timestamp, value")
+                else:
+                    INDEX_MAP[_sym] = {
+                        "symbol": _sym,
+                        "name": _name or _sym,
+                        "desc": _desc or "User-added index",
+                        "source": {"type":"url_csv","url":_url,"value_field":"value","time_field":"timestamp"},
+                        "format": {"decimals": int(_dec), "unit": ""}
+                    }
+                    symbols.append(_sym)
+                    st.success(f"Added {_sym}. Select it in the Index dropdown.")
+            except Exception as e:
+                st.error(f"Could not load CSV: {e}")
+
+    # Category + Index pickers
+    categories = sorted({INDEX_MAP[s].get("category", "Other") for s in symbols})
+    cat = st.selectbox("Category", ["All"] + categories)
+    filtered_symbols = [s for s in symbols if cat == "All" or INDEX_MAP[s].get("category") == cat]
+
+    symbol = st.selectbox(
+        "Index",
+        filtered_symbols if filtered_symbols else symbols,
+        format_func=lambda s: INDEX_MAP[s]["name"]
+    )
+
+    # Trade controls
+    st.header("Trade")
+    lev = st.slider("Leverage", 1, 20, 5)
+    notional = st.number_input("Order Notional (USD)", min_value=10.0, value=500.0, step=10.0)
+    side = st.radio("Side", ["LONG","SHORT"], horizontal=True)
+
 
 idx_cfg = INDEX_MAP[symbol]
 df = load_series(idx_cfg)
@@ -141,7 +145,40 @@ st.caption("Trade attention & influence as indices. Demo only.")
 colA, colB = st.columns([3,2], gap="large")
 with colA:
     st.subheader(idx_cfg["name"])
-    st.line_chart(df.set_index("time")["value"])
+
+
+    df = df.copy()
+    
+    df["ma20"] = df["value"].rolling(20, min_periods=1).mean()
+    df["ma50"] = df["value"].rolling(50, min_periods=1).mean()
+
+ 
+    def _ma(s, n=30): return s.rolling(n, min_periods=1).mean()
+    prem = (df["value"] - _ma(df["value"], 30)) / _ma(df["value"], 30).replace(0, np.nan)
+    df["funding_daily_pct"] = (0.0005 * prem.fillna(0)) * 24 * 100
+
+    fig = go.Figure()
+   
+    fig.add_trace(go.Scatter(x=df["time"], y=df["value"], name="Index", mode="lines"))
+    fig.add_trace(go.Scatter(x=df["time"], y=df["ma20"],  name="MA20",  mode="lines"))
+    fig.add_trace(go.Scatter(x=df["time"], y=df["ma50"],  name="MA50",  mode="lines"))
+
+    fig.add_trace(go.Scatter(
+        x=df["time"], y=df["funding_daily_pct"], name="Funding (24h %)",
+        mode="lines", yaxis="y2"
+    ))
+
+    fig.update_layout(
+        xaxis=dict(title="Date", rangeslider=dict(visible=True)),
+        yaxis=dict(title="Index"),
+        yaxis2=dict(title="Funding %", overlaying="y", side="right", showgrid=False),
+        legend=dict(orientation="h", y=1.1),
+        margin=dict(l=10, r=10, t=10, b=10),
+        height=420
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
 with colB:
     st.markdown("**About this index**")
     st.write(idx_cfg["desc"])
