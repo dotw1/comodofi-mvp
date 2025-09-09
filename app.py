@@ -144,14 +144,10 @@ with st.sidebar:
 
 # ---- Front page hero (centered)
 st.image("logo.svg", width=220)
-st.markdown(
-    "<div style='text-align:center; font-size:2rem; font-weight:800; margin-top:.25rem;'>Comodofi</div>",
-    unsafe_allow_html=True
-)
-st.markdown(
-    "<div style='text-align:center; color:gray; margin-top:.15rem;'>The exchange of influence</div>",
-    unsafe_allow_html=True
-)
+# ---- Front page hero (logo only)
+st.markdown("<div style='text-align:center; margin:1rem 0 2rem;'>", unsafe_allow_html=True)
+st.image("logo.svg", width=260)   # adjust size if you want
+st.markdown("</div>", unsafe_allow_html=True)
 st.divider()
 
 # ---- Load selected index + metrics
