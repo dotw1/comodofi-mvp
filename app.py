@@ -36,6 +36,21 @@ if not st.session_state.auth_ok:
 
 # --- Front page logo & tagline ---
 st.image("logo.svg", width=220)
+
+st.markdown(
+    "<h1 style='text-align: center;'>Comodofi</h1>",
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    "<p style='text-align: center; color: gray;'>The exchange of influence</p>",
+    unsafe_allow_html=True
+)
+
+st.divider()
+
+# --- Front page logo & tagline ---
+st.image("logo.svg", width=220)
 st.markdown("<h1 style='text-align: center;'>Comodofi</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: gray;'>The exchange of influence</p>", unsafe_allow_html=True)
 st.divider()
