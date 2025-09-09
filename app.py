@@ -94,10 +94,10 @@ with col2:
 
 # ---- Sidebar (ONE block only) ----
 with st.sidebar:
-    # Branding
-    st.image("logo.svg")
+    st.image("logo.png", width=48)
     st.caption("**Comodofi** — The exchange of influence")
     st.markdown("---")
+
 
     # Actions
     if st.button("🔄 Refresh data"):
@@ -162,15 +162,21 @@ mark = float(df["value"].iloc[-1])
 fr = funding_rate(df["value"]).iloc[-1] * 24 * 100
 
 # --- Hero with logo + brand centered ---
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    c_logo, c_text = st.columns([1, 3])
-    with c_logo:
-        st.image("logo.svg", width=48)
-    with c_text:
-        st.markdown("<div class='hero-title'>Comodofi</div>", unsafe_allow_html=True)
-
-    st.markdown("<div class='hero-sub'>The exchange of influence</div>", unsafe_allow_html=True)
+# --- Hero Section ---
+st.markdown(
+    """
+    <div style="text-align:center; margin-top:1rem; margin-bottom:2rem;">
+        <img src="logo.png" width="96">
+        <div style="font-size:2.5rem; font-weight:800; margin-top:0.5rem;">
+            Comodofi
+        </div>
+        <div style="font-size:1.2rem; color:gray; margin-top:0.2rem;">
+            The exchange of influence
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 colA, colB = st.columns([3,2], gap="large")
