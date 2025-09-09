@@ -155,15 +155,15 @@ mark = float(df["value"].iloc[-1])
 fr = funding_rate(df["value"]).iloc[-1] * 24 * 100
 
 # Centered hero with logo + brand
+# --- Clean hero: logo + brand side by side ---
 c1, c2, c3 = st.columns([1, 2, 1])
 with c2:
-    st.image("logo.svg", width=220)
     st.markdown("""
-    <div class="hero-wrap">
+    <div class="hero-wrap" style="display:flex; align-items:center; justify-content:center; gap:0.6rem;">
+      <img src="logo.svg" width="48">
       <div class="hero-title">Comodofi</div>
-      <div class="hero-sub">The exchange of influence</div>
-      <div class="hero-tag">Trade attention &amp; influence as indices. Demo only.</div>
     </div>
+    <div class="hero-sub">The exchange of influence</div>
     """, unsafe_allow_html=True)
 
 
