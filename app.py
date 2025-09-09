@@ -34,6 +34,12 @@ if not st.session_state.auth_ok:
             st.error("Wrong code or missing nickname.")
     st.stop()
 
+# --- Front page logo & tagline ---
+st.image("logo.svg", width=220)
+st.markdown("<h1 style='text-align: center;'>Comodofi</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: gray;'>The exchange of influence</p>", unsafe_allow_html=True)
+st.divider()
+
 # ---- Config & indices (must load BEFORE building the sidebar) ----
 @st.cache_data
 def load_config():
