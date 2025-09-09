@@ -75,14 +75,21 @@ def ensure_state():
 ensure_state()
 
 # --- Minimal styling for a clean hero ---
-st.markdown("""
-<style>
-.hero-wrap { text-align:center; margin: -0.5rem 0 1.25rem 0; }
-.hero-title { font-size: 2.25rem; font-weight: 800; line-height: 1.1; }
-.hero-sub   { font-size: 0.95rem; color: #6b7280; margin-top: 0.15rem; }
-.hero-tag   { font-size: 0.9rem; color: #94a3b8; margin-top: 0.35rem; }
-</style>
-""", unsafe_allow_html=True)
+# --- Clean hero: logo + brand ---
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.markdown("""
+    <div style="text-align:center;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem;">
+        <img src="logo.svg" width="48">
+        <span style="font-size:2.5rem;font-weight:800;">Comodofi</span>
+      </div>
+      <div style="font-size:1.2rem;color:gray;margin-top:0.4rem;">
+        The exchange of influence
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 
 # ---- Sidebar (ONE block only) ----
@@ -168,40 +175,61 @@ with col2:
 
 colA, colB = st.columns([3,2], gap="large")
 with colA:
-    st.subheader(idx_cfg["name"])
+    with colA:
+    # --- Robinhood-style header (big price + change) ---
+    dfv = df.copy()
+    # timeframe toggle
+    tf = st.radio("Timeframe", ["1D","1W","1M","3M","1Y","ALL"], horizontal=True, index=2, label_visibility="collapsed")
+    periods = {"1D": pd.Timedelta(days=1), "1W": pd.Timedelta(weeks=1),
+               "1M": pd.Timedelta(days=30), "3M": pd.Timedelta(days=90),
+               "1Y": pd.Timedelta(days=365)}
+    if tf != "ALL":
+        start = dfv["time"].max() - periods[tf]
+        dfv = dfv[dfv["time"] >= start]
 
+    current = float(dfv["value"].iloc[-1])
+    first   = float(dfv["value"].iloc[0])
+    chg     = current - first
+    chg_pct = (chg / first) * 100 if first != 0 else 0.0
+    up = chg >= 0
+    color = "#00C805" if up else "#FF3B30"   # robinhood green / red
 
-    df = df.copy()
-    
-    df["ma20"] = df["value"].rolling(20, min_periods=1).mean()
-    df["ma50"] = df["value"].rolling(50, min_periods=1).mean()
+    # price header
+    st.markdown(
+        f"""
+        <div style="display:flex;align-items:baseline;gap:.75rem;">
+          <div style="font-size:2rem;font-weight:800;">{current:.4f}</div>
+          <div style="font-size:1rem;color:{color};font-weight:600;">
+            {chg:+.4f} ({chg_pct:+.2f}%)
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
- 
-    def _ma(s, n=30): return s.rolling(n, min_periods=1).mean()
-    prem = (df["value"] - _ma(df["value"], 30)) / _ma(df["value"], 30).replace(0, np.nan)
-    df["funding_daily_pct"] = (0.0005 * prem.fillna(0)) * 24 * 100
-
+    # --- Minimal, friendly area chart ---
     fig = go.Figure()
-   
-    fig.add_trace(go.Scatter(x=df["time"], y=df["value"], name="Index", mode="lines"))
-    fig.add_trace(go.Scatter(x=df["time"], y=df["ma20"],  name="MA20",  mode="lines"))
-    fig.add_trace(go.Scatter(x=df["time"], y=df["ma50"],  name="MA50",  mode="lines"))
-
     fig.add_trace(go.Scatter(
-        x=df["time"], y=df["funding_daily_pct"], name="Funding (24h %)",
-        mode="lines", yaxis="y2"
+        x=dfv["time"], y=dfv["value"],
+        mode="lines",
+        line=dict(width=2, color=color),
+        fill="tozeroy",
+        fillcolor="rgba(0,200,5,0.10)" if up else "rgba(255,59,48,0.10)",
+        hovertemplate="%{x|%Y-%m-%d}<br><b>%{y:.4f}</b><extra></extra>",
+        name=""
     ))
 
     fig.update_layout(
-        xaxis=dict(title="Date", rangeslider=dict(visible=True)),
-        yaxis=dict(title="Index"),
-        yaxis2=dict(title="Funding %", overlaying="y", side="right", showgrid=False),
-        legend=dict(orientation="h", y=1.1),
-        margin=dict(l=10, r=10, t=10, b=10),
-        height=420
+        showlegend=False,
+        margin=dict(l=6, r=6, t=6, b=6),
+        height=340,
+        hovermode="x unified",
+        xaxis=dict(showgrid=False, zeroline=False, showspikes=True, spikemode="across", spikesnap="cursor"),
+        yaxis=dict(showgrid=False, zeroline=False),
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
 
 with colB:
     st.markdown("**About this index**")
