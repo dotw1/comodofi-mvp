@@ -75,29 +75,24 @@ def ensure_state():
 ensure_state()
 
 # --- Minimal styling for a clean hero ---
-# --- Clean hero: logo + brand ---
+# --- Hero (centered) ---
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.markdown("""
-    <div style="text-align:center;">
-      <div style="display:flex;align-items:center;justify-content:center;gap:0.6rem;">
-        <img src="logo.svg" width="48">
-        <span style="font-size:2.5rem;font-weight:800;">Comodofi</span>
-      </div>
-      <div style="font-size:1.2rem;color:gray;margin-top:0.4rem;">
-        The exchange of influence
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-
+    st.image("logo.svg", width=96)  # ← same existing file
+    st.markdown(
+        "<div style='text-align:center; font-size:2.6rem; font-weight:800; margin-top:.5rem;'>Comodofi</div>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div style='text-align:center; font-size:1.15rem; color:gray; margin-top:.2rem;'>The exchange of influence</div>",
+        unsafe_allow_html=True
+    )
+    
 # ---- Sidebar (ONE block only) ----
 with st.sidebar:
-    st.image("logo.png", width=48)
+    st.image("logo.svg", width=48)   # ← use the existing file
     st.caption("**Comodofi** — The exchange of influence")
     st.markdown("---")
-
 
     # Actions
     if st.button("🔄 Refresh data"):
