@@ -6,6 +6,35 @@ from datetime import datetime
 import json
 
 st.set_page_config(page_title="Comodofi – MVP", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Comodofi – MVP", page_icon="📊", layout="wide")
+
+# --- Access Gate (invite-only) ---
+INVITE_CODE = "COMODOFI2025"  # change this
+
+if "auth_ok" not in st.session_state:
+    st.session_state.auth_ok = False
+if "nickname" not in st.session_state:
+    st.session_state.nickname = ""
+
+if not st.session_state.auth_ok:
+    st.title("🔒 Comodofi Access")
+    st.caption("Enter the invite code to try the demo.")
+    code = st.text_input("Invite code", type="password")
+    nick = st.text_input("Pick a nickname (for the leaderboard)")
+    if st.button("Enter"):
+        if code.strip() == INVITE_CODE and nick.strip():
+            st.session_state.auth_ok = True
+            st.session_state.nickname = nick.strip()[:20]
+            st.experimental_rerun()
+        else:
+            st.error("Wrong code or missing nickname.")
+    st.stop()
+
+# Sidebar Branding
+with st.sidebar:
+    st.image("logo.svg")
+    st.caption("**Comodofi** — The exchange of influence")
+    st.markdown("---")
 
 # Sidebar Branding
 with st.sidebar:
