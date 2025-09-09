@@ -6,14 +6,11 @@
       "desc": "Composite of polling averages, search interest, and media mentions.",
       "source": {
         "type": "csv",
-        "path": "data/leader_approval.csv",
+        "path": "leader_approval.csv",
         "value_field": "value",
         "time_field": "timestamp"
       },
-      "format": {
-        "decimals": 2,
-        "unit": ""
-      }
+      "format": { "decimals": 2, "unit": "" }
     },
     {
       "symbol": "CELEB_HYPE",
@@ -21,14 +18,11 @@
       "desc": "Composite of streaming counts, social mentions, and ticket demand.",
       "source": {
         "type": "csv",
-        "path": "data/celebrity_hype.csv",
+        "path": "celebrity_hype.csv",
         "value_field": "value",
         "time_field": "timestamp"
       },
-      "format": {
-        "decimals": 2,
-        "unit": ""
-      }
+      "format": { "decimals": 2, "unit": "" }
     },
     {
       "symbol": "AI_VS_CRYPTO",
@@ -36,14 +30,11 @@
       "desc": "Relative search/news volume between AI and Crypto narratives.",
       "source": {
         "type": "csv",
-        "path": "data/ai_vs_crypto.csv",
+        "path": "ai_vs_crypto.csv",
         "value_field": "value",
         "time_field": "timestamp"
       },
-      "format": {
-        "decimals": 3,
-        "unit": ""
-      }
+      "format": { "decimals": 3, "unit": "" }
     }
   ]
 }
