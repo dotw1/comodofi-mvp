@@ -1,8 +1,8 @@
 {
   "indices": [
     {
-      "symbol": "LEADER_APPROVAL",
-      "name": "Leader Approval Index",
+      "symbol": "TRMP",
+      "name": "Trump Index",
       "desc": "Composite of polling averages, search interest, and media mentions.",
       "category": "Politics",
       "source": { "type": "csv", "path": "leader_approval.csv",
@@ -10,8 +10,8 @@
       "format": { "decimals": 2, "unit": "" }
     },
     {
-      "symbol": "CELEB_HYPE",
-      "name": "Celebrity Hype Index",
+      "symbol": "SWFTY",
+      "name": "TAYLOR SWIFT Index",
       "desc": "Composite of streaming counts, social mentions, and ticket demand.",
       "category": "Culture",
       "source": { "type": "csv", "path": "celebrity_hype.csv",
@@ -19,8 +19,8 @@
       "format": { "decimals": 2, "unit": "" }
     },
     {
-      "symbol": "AI_VS_CRYPTO",
-      "name": "AI vs Crypto Momentum",
+      "symbol": "TECH",
+      "name": "AI Momentum",
       "desc": "Relative search/news volume between AI and Crypto narratives.",
       "category": "Tech",
       "source": { "type": "csv", "path": "ai_vs_crypto.csv",
