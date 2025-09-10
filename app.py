@@ -143,10 +143,9 @@ with st.sidebar:
 
 # ---- Front page hero (only one logo, bigger, centered) ----
 # ---- Front page hero (centered logo only) ----
-st.markdown("<div style='text-align:center; margin:2rem 0;'>", unsafe_allow_html=True)
-st.image("logo.svg", width=500)
-st.markdown("</div>", unsafe_allow_html=True)
-
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("logo.svg", width=520)  # adjust size if you want
 st.divider()
 
 
