@@ -142,11 +142,13 @@ with st.sidebar:
     side = st.radio("Side", ["LONG", "SHORT"], horizontal=True)
 
 # ---- Front page hero (only one logo, bigger, centered) ----
+# ---- Front page hero (centered logo only) ----
 st.markdown("<div style='text-align:center; margin:2rem 0;'>", unsafe_allow_html=True)
-st.image("logo.svg", width=420)  # make it bigger (adjust px as you like)
+st.image("logo.svg", width=500)
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
+
 
 # ---- Load selected index + metrics
 idx_cfg = INDEX_MAP[symbol]
