@@ -82,7 +82,7 @@ ensure_state()
 
 # ---- Sidebar (branding small + controls)
 with st.sidebar:
-    st.image("logo.svg", width=220)
+    st.image("logo.svg", width=620)
     st.markdown("---")
 
     # Actions
